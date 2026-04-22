@@ -55,7 +55,6 @@ end
     4, ...
     [], [], [], [], ...
     lb, ub, ...
-    @(design) constraintFunction(design), ...
     intcon, ...
     options);
 
@@ -99,18 +98,6 @@ catch err
         design(1), design(2), design(3), design(4), err.message);
     objectives = [1e6, 1e6, 1e12, 1];
 end
-
-end
-
-function [c, ceq] = constraintFunction(design)
-
-planeCount = round(design(3));
-satelliteCount = round(design(4));
-
-c = [ ...
-    planeCount - satelliteCount; ...
-    double(mod(satelliteCount, planeCount) ~= 0) - 0.5];
-ceq = [];
 
 end
 
