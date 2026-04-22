@@ -41,7 +41,8 @@ end
 options = optimoptions('gamultiobj', ...
     'PopulationSize', populationSize, ...
     'MaxGenerations', maxGenerations, ...
-    'Display', 'iter', ...
+    'FunctionTolerance', 1e-12, ...
+    'Display', 'off', ...
     'UseVectorized', false, ...
     'UseParallel', true);
 
@@ -68,7 +69,7 @@ fprintf('\nNSGA-II complete.\n');
 fprintf('  Pareto solutions found = %d\n', size(results.designs, 1));
 fprintf('  Population size        = %d\n', populationSize);
 fprintf('  Max generations        = %d\n', maxGenerations);
-fprintf('  Results table          = nsga2_pareto_results.csv\n');
+fprintf('  Results table          = nsga2_pareto_results.xlsx\n');
 fprintf('  Results data           = nsga2_pareto_results.mat\n');
 
 end
@@ -170,7 +171,7 @@ end
 
 function writeParetoResults(results)
 
-writetable(results.designs, 'nsga2_pareto_results.csv');
+writetable(results.designs, 'nsga2_pareto_results.xlsx', 'Sheet', 'ParetoFront');
 save('nsga2_pareto_results.mat', 'results');
 
 end
@@ -213,11 +214,6 @@ fprintf('  1. Minimize mean GDOP\n');
 fprintf('  2. Minimize GDOP deviation\n');
 fprintf('  3. Minimize cost\n');
 fprintf('  4. Maximize availability\n');
-
-fprintf('Constraints\n');
-fprintf('  1. Elevation mask = %.0f deg\n', config.elevationMaskDeg);
-fprintf('  2. GDOP > %.0f treated as unavailable\n', config.gdopAvailabilityThreshold);
-fprintf('  3. Walker-style plane/satellite divisibility enforced\n');
 
 fprintf('NSGA-II settings\n');
 fprintf('  Population size = %d\n', populationSize);

@@ -1,13 +1,39 @@
-function plotTargetMetrics(tspan, visibleCountAll, gdopAllVisible, siteNames, gdopMaxForPlot)
+function plotTargetMetrics(metrics)
 
-if nargin < 5
-    gdopMaxForPlot = inf;
-end
+tspan = metrics.tspan;
+visibleCountAll = metrics.visibleCountAll;
+gdopAllVisible = metrics.gdopAllVisible;
+siteNames = metrics.siteNames;
+gdopMaxForPlot = metrics.gdopAvailabilityThreshold;
 
 tHours = hours(tspan - tspan(1));
 nUser = size(gdopAllVisible, 2);
 gdopPlotData = gdopAllVisible;
 gdopPlotData(gdopPlotData > gdopMaxForPlot) = NaN;
+
+figure('Name', 'Global Constellation Metrics', 'NumberTitle', 'off');
+subplot(3, 1, 1);
+plot(tHours, metrics.globalMeanGDOPOverTime, 'LineWidth', 1.5);
+grid on;
+xlim([0, max(tHours)]);
+ylabel('Mean GDOP');
+title('Global Mean GDOP vs Time');
+
+subplot(3, 1, 2);
+plot(tHours, metrics.globalAvailabilityOverTime, 'LineWidth', 1.5);
+grid on;
+xlim([0, max(tHours)]);
+ylim([0, 1]);
+ylabel('Availability');
+title('Global Availability vs Time');
+
+subplot(3, 1, 3);
+plot(tHours, metrics.globalMeanVisibleOverTime, 'LineWidth', 1.5);
+grid on;
+xlim([0, max(tHours)]);
+xlabel('Time (hr)');
+ylabel('Visible Sats');
+title('Global Mean Visible Satellites vs Time');
 
 if nUser > 20
     figure('Name', 'Visible Satellites Heatmap', 'NumberTitle', 'off');
