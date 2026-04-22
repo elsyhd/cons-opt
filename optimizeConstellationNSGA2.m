@@ -79,7 +79,7 @@ function objectives = objectiveFunction(design, baseConfig)
 config = decodeDesign(design, baseConfig);
 
 if mod(config.numSatellites, config.numPlanes) ~= 0
-    objectives = penaltyObjectives();
+    objectives = [1e6, 1e6, 1e12, 1];
     return;
 end
 
@@ -92,12 +92,12 @@ try
         -metrics.globalMeanAvailability];
 
     if any(~isfinite(objectives))
-        objectives = penaltyObjectives();
+        objectives = [1e6, 1e6, 1e12, 1];
     end
 catch err
     warning('NSGA-II evaluation failed for [%g %g %g %g]: %s', ...
         design(1), design(2), design(3), design(4), err.message);
-    objectives = penaltyObjectives();
+    objectives = [1e6, 1e6, 1e12, 1];
 end
 
 end
@@ -111,12 +111,6 @@ c = [ ...
     planeCount - satelliteCount; ...
     double(mod(satelliteCount, planeCount) ~= 0) - 0.5];
 ceq = [];
-
-end
-
-function objectives = penaltyObjectives()
-
-objectives = [1e6, 1e6, 1e12, 1];
 
 end
 
